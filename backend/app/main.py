@@ -1,3 +1,7 @@
+from app.core.database import get_db
+from app.core.security import get_current_user
+from app.routers.auth import router as auth_router
+
 
 import sqlite3
 from uuid import uuid4
@@ -77,18 +81,9 @@ class AppointmentCreate(BaseModel):
 class AppointmentReschedule(BaseModel):
     new_slot_id: str
 
-class LoginRequest(BaseModel):
-    email: EmailStr
-    password: str = Field(min_length=1)
 
 
-password_hasher = PasswordHasher()
-SESSION_COOKIE = "hospital_session"
 
-def get_db():
-    conn = sqlite3.connect(DB_PATH, timeout=10)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 def initialize_db():
     with closing(get_db()) as conn:
@@ -614,104 +609,9 @@ def reschedule_appointment(
 
 
 
-@app.post("/auth/login")
-def login(credentials: LoginRequest, response: Response):
-    with closing(get_db()) as conn:
-        user = conn.execute("""
-            SELECT *
-            FROM users
-            WHERE email = ? AND is_active = 1
-        """, (str(credentials.email),)).fetchone()
-
-        # Same response for incorrect email or password
-        if user is None:
-            raise HTTPException(401, "Invalid credentials")
-
-        try:
-            password_hasher.verify(
-                user["password_hash"],
-                credentials.password
-            )
-        except (VerifyMismatchError, VerificationError):
-            raise HTTPException(401, "Invalid credentials")
-
-        token = secrets.token_urlsafe(32)
-        token_hash = hashlib.sha256(
-            token.encode("utf-8")
-        ).hexdigest()
-
-        expires_at = (
-            datetime.now(timezone.utc) + timedelta(hours=1)
-        ).isoformat()
-
-        conn.execute("""
-            INSERT INTO sessions
-            (session_id, user_id, token_hash, expires_at)
-            VALUES (?, ?, ?, ?)
-        """, (
-            str(uuid4()),
-            user["user_id"],
-            token_hash,
-            expires_at
-        ))
-        conn.commit()
-
-    response.set_cookie(
-        key=SESSION_COOKIE,
-        value=token,
-        httponly=True,
-        secure=False,  # Local HTTP demo only
-        samesite="lax",
-        max_age=3600,
-        path="/"
-    )
-
-    return {
-        "message": "Login successful",
-        "role": user["role"]
-    }
-
-def get_current_user(token: str | None):
-    if not token:
-        raise HTTPException(401, "Authentication required")
-
-    token_hash = hashlib.sha256(
-        token.encode("utf-8")
-    ).hexdigest()
-
-    with closing(get_db()) as conn:
-        user = conn.execute("""
-            SELECT u.user_id, u.patient_id,
-                   u.email, u.role, s.expires_at
-            FROM sessions s
-            JOIN users u ON s.user_id = u.user_id
-            WHERE s.token_hash = ?
-              AND u.is_active = 1
-        """, (token_hash,)).fetchone()
-
-    if user is None:
-        raise HTTPException(401, "Invalid session")
-
-    if datetime.fromisoformat(
-        user["expires_at"]
-    ) <= datetime.now(timezone.utc):
-        raise HTTPException(401, "Session expired")
-
-    return dict(user)
 
 
-@app.get("/auth/me")
-def my_profile(
-    hospital_session: str | None = Cookie(default=None)
-):
-    user = get_current_user(hospital_session)
 
-    return {
-        "user_id": user["user_id"],
-        "patient_id": user["patient_id"],
-        "email": user["email"],
-        "role": user["role"]
-    }
 
 
 
@@ -744,30 +644,6 @@ def my_appointments(
 
 
 
-@app.post("/auth/logout")
-def logout(
-    response: Response,
-    hospital_session: str | None = Cookie(default=None)
-):
-    if hospital_session:
-        token_hash = hashlib.sha256(
-            hospital_session.encode("utf-8")
-        ).hexdigest()
-
-        with closing(get_db()) as conn:
-            conn.execute(
-                "DELETE FROM sessions WHERE token_hash = ?",
-                (token_hash,)
-            )
-            conn.commit()
-
-    response.delete_cookie(
-        SESSION_COOKIE,
-        path="/",
-        samesite="lax"
-    )
-
-    return {"message": "Logged out successfully"}
 
 
 @app.get("/patient-portal", include_in_schema=False)
@@ -775,3 +651,5 @@ def patient_portal():
     return FileResponse(
         Path(__file__).resolve().parent.parent / "static" / "patient.html"
     )
+
+app.include_router(auth_router)

@@ -1,4 +1,5 @@
 fastapi
 uvicorn
 httpx
-pytest
+pytestemail-validator
+argon2-cffi

@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hospital Support Dashboard</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      background: #f4f7fb;
+      color: #182638;
+    }
+    header {
+      background: #154e66;
+      color: white;
+      padding: 24px;
+    }
+    main {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .panel {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px #00000010;
+    }
+    input, select, textarea, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 11px;
+      margin: 7px 0 14px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font: inherit;
+    }
+    button {
+      background: #15647a;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover { background: #104c5d; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+    .table-wrap { overflow-x: auto; }
+    .status { font-weight: 600; }
+    .note { color: #64748b; font-size: 13px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Hospital Support Dashboard</h1>
+  <p>Administrative query management — Demo environment</p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Create Support Ticket</h2>
+    <form id="ticketForm">
+      <label for="patient">Demo Patient ID</label>
+      <input id="patient" value="DEMO003" required maxlength="50">
+
+      <label for="category">Category</label>
+      <select id="category">
+        <option value="appointment">Appointment</option>
+        <option value="billing">Billing</option>
+        <option value="portal_access">Portal Access</option>
+        <option value="general">General</option>
+      </select>
+
+      <label for="question">Question</label>
+      <textarea id="question" required minlength="5"
+        maxlength="1000"></textarea>
+
+      <button type="submit">Submit Ticket</button>
+    </form>
+    <p id="message" role="status"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Support Tickets</h2>
+    <button id="refreshButton">Refresh Tickets</button>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Category</th>
+            <th>Question</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tickets"></tbody>
+      </table>
+    </div>
+    <p class="note">Demo only. Do not enter real patient information.</p>
+  </section>
+</main>
+
+<script>
+const form = document.getElementById("ticketForm");
+const message = document.getElementById("message");
+const ticketsBody = document.getElementById("tickets");
+
+function cell(row, value) {
+  const td = document.createElement("td");
+  td.textContent = value;
+  row.appendChild(td);
+  return td;
+}
+
+async function loadTickets() {
+  ticketsBody.replaceChildren();
+  try {
+    const response = await fetch("/queries");
+    if (!response.ok) throw new Error("Failed to load tickets");
+    const tickets = await response.json();
+
+    for (const ticket of tickets) {
+      const row = document.createElement("tr");
+      cell(row, ticket.patient_id);
+      cell(row, ticket.category);
+      cell(row, ticket.question);
+
+      const td = document.createElement("td");
+      const select = document.createElement("select");
+
+      for (const status of ["open", "in_progress", "resolved"]) {
+        const option = document.createElement("option");
+        option.value = status;
+        option.textContent = status.replace("_", " ");
+        select.appendChild(option);
+      }
+
+      select.value = ticket.status;
+      select.addEventListener("change", async () => {
+        select.disabled = true;
+        try {
+          const response = await fetch(
+            `/queries/${encodeURIComponent(ticket.ticket_id)}`,
+            {
+              method: "PATCH",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({status: select.value})
+            }
+          );
+          if (!response.ok) throw new Error("Status update failed");
+        } catch (error) {
+          message.textContent = error.message;
+        } finally {
+          await loadTickets();
+        }
+      });
+
+      td.appendChild(select);
+      row.appendChild(td);
+      ticketsBody.appendChild(row);
+    }
+  } catch (error) {
+    message.textContent = error.message;
+  }
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const payload = {
+    patient_id: document.getElementById("patient").value,
+    category: document.getElementById("category").value,
+    question: document.getElementById("question").value
+  };
+
+  try {
+    const response = await fetch("/queries", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) throw new Error("Could not create ticket");
+    message.textContent = "Ticket created successfully";
+    form.reset();
+    await loadTickets();
+  } catch (error) {
+    message.textContent = error.message;
+  }
+});
+
+document.getElementById("refreshButton")
+  .addEventListener("click", loadTickets);
+
+loadTickets();
+</script>
+</body>
+</html>

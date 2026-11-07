@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hospital Patient Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      color: #243044;
+    }
+    header {
+      background: #176b8a;
+      color: white;
+      padding: 20px;
+    }
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px #00000010;
+    }
+    input, button {
+      padding: 11px;
+      margin: 6px 0;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    input {
+      border: 1px solid #ccd5df;
+      width: min(100%, 320px);
+      box-sizing: border-box;
+    }
+    button {
+      background: #176b8a;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover { background: #12546c; }
+    .hidden { display: none; }
+    .appointment {
+      border: 1px solid #e1e6ee;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    .muted { color: #627084; }
+    .error { color: #b42318; }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Hospital Patient Portal</h2>
+    <p>Local educational demo · Fictional patient data</p>
+  </header>
+
+  <main>
+    <section id="loginPanel" class="card">
+      <h2>Patient Login</h2>
+      <form id="loginForm">
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          autocomplete="username"
+          required
+        >
+        <br>
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+        >
+        <br>
+        <button type="submit">Log in</button>
+      </form>
+      <p id="loginMessage" class="error" role="alert"></p>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="card">
+        <h2>My Patient Dashboard</h2>
+        <p id="profile"></p>
+        <button id="logoutButton">Log out</button>
+      </div>
+
+      <div class="card">
+        <h2>My Appointments</h2>
+        <button id="refreshButton">Refresh appointments</button>
+        <div id="appointments"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const loginPanel = document.getElementById("loginPanel");
+    const dashboard = document.getElementById("dashboard");
+    const loginMessage = document.getElementById("loginMessage");
+
+    function showLogin() {
+      dashboard.classList.add("hidden");
+      loginPanel.classList.remove("hidden");
+    }
+
+    function showDashboard() {
+      loginPanel.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+    }
+
+    async function loadProfile() {
+      const response = await fetch("/auth/me", {
+        credentials: "same-origin"
+      });
+
+      if (!response.ok) {
+        showLogin();
+        return false;
+      }
+
+      const user = await response.json();
+
+      document.getElementById("profile").textContent =
+        `Logged in as ${user.email} (${user.role})`;
+
+      showDashboard();
+      return true;
+    }
+
+    async function loadAppointments() {
+      const container = document.getElementById("appointments");
+      container.replaceChildren();
+
+      const response = await fetch("/my/appointments", {
+        credentials: "same-origin"
+      });
+
+      if (response.status === 401) {
+        showLogin();
+        return;
+      }
+
+      if (!response.ok) {
+        container.textContent = "Unable to load appointments.";
+        return;
+      }
+
+      const appointments = await response.json();
+
+      if (appointments.length === 0) {
+        container.textContent = "No appointments found.";
+        return;
+      }
+
+      for (const appointment of appointments) {
+        const card = document.createElement("div");
+        card.className = "appointment";
+
+        const doctor = document.createElement("strong");
+        doctor.textContent = appointment.doctor;
+
+        const info = document.createElement("p");
+        info.className = "muted";
+        info.textContent =
+          `${appointment.specialization} · ` +
+          `${new Date(appointment.starts_at).toLocaleString()}`;
+
+        const status = document.createElement("p");
+        status.textContent = `Status: ${appointment.status}`;
+
+        card.append(doctor, info, status);
+        container.appendChild(card);
+      }
+    }
+
+    document.getElementById("loginForm")
+      .addEventListener("submit", async (event) => {
+        event.preventDefault();
+        loginMessage.textContent = "";
+
+        const response = await fetch("/auth/login", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+          })
+        });
+
+        document.getElementById("password").value = "";
+
+        if (!response.ok) {
+          loginMessage.textContent = "Login failed. Check your credentials.";
+          return;
+        }
+
+        if (await loadProfile()) {
+          await loadAppointments();
+        }
+      });
+
+    document.getElementById("logoutButton")
+      .addEventListener("click", async () => {
+        await fetch("/auth/logout", {
+          method: "POST",
+          credentials: "same-origin"
+        });
+        showLogin();
+      });
+
+    document.getElementById("refreshButton")
+      .addEventListener("click", loadAppointments);
+
+    (async () => {
+      if (await loadProfile()) {
+        await loadAppointments();
+      }
+    })();
+  </script>
+</body>
+</html>

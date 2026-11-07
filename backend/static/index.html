@@ -3,72 +3,237 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hospital Support Dashboard</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, sans-serif;
       margin: 0;
-      background: #f4f7fb;
-      color: #182638;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #253247;
     }
+
     header {
-      background: #154e66;
+      background: #155e75;
       color: white;
-      padding: 24px;
+      padding: 24px 32px;
     }
+
+    header h1 {
+      margin: 0 0 8px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.9;
+    }
+
     main {
-      max-width: 1000px;
+      max-width: 1250px;
       margin: 30px auto;
       padding: 0 20px;
     }
+
     .panel {
       background: white;
-      border-radius: 12px;
       padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 10px #00000010;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
-    input, select, textarea, button {
-      box-sizing: border-box;
+
+    .panel h2 {
+      margin-top: 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit, minmax(180px, 1fr)
+      );
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: #eaf4f8;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .stat-card h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .stat-card strong {
+      font-size: 32px;
+      color: #155e75;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
       width: 100%;
       padding: 11px;
-      margin: 7px 0 14px;
-      border-radius: 6px;
       border: 1px solid #cbd5e1;
+      border-radius: 6px;
       font: inherit;
     }
+
+    textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
+
     button {
+      padding: 12px 18px;
       background: #15647a;
       color: white;
-      cursor: pointer;
       border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit;
     }
-    button:hover { background: #104c5d; }
-    table { width: 100%; border-collapse: collapse; }
+
+    button:hover {
+      background: #104c5d;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .submit-btn {
+      margin-top: 18px;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .toolbar h2 {
+      margin: 0;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
     th, td {
-      padding: 12px;
+      padding: 14px;
       border-bottom: 1px solid #e2e8f0;
       text-align: left;
-      overflow-wrap: anywhere;
+      vertical-align: middle;
     }
-    .table-wrap { overflow-x: auto; }
-    .status { font-weight: 600; }
-    .note { color: #64748b; font-size: 13px; }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    td select {
+      min-width: 125px;
+      padding: 8px;
+    }
+
+    .message {
+      margin-top: 14px;
+      font-size: 14px;
+      min-height: 18px;
+    }
+
+    .error {
+      color: #b91c1c;
+    }
+
+    .success {
+      color: #15803d;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 18px;
+    }
   </style>
 </head>
+
 <body>
+
 <header>
   <h1>Hospital Support Dashboard</h1>
-  <p>Administrative query management — Demo environment</p>
+  <p>Administrative Patient Query Management System</p>
 </header>
 
 <main>
+
+  <!-- DASHBOARD STATISTICS -->
+  <section class="panel">
+    <h2>Support Overview</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Tickets</h3>
+        <strong id="totalCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>Open Tickets</h3>
+        <strong id="openCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>In Progress</h3>
+        <strong id="progressCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>Resolved Tickets</h3>
+        <strong id="resolvedCount">0</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATE TICKET -->
   <section class="panel">
     <h2>Create Support Ticket</h2>
+
     <form id="ticketForm">
       <label for="patient">Demo Patient ID</label>
-      <input id="patient" value="DEMO003" required maxlength="50">
+      <input
+        type="text"
+        id="patient"
+        value="DEMO003"
+        required
+        maxlength="50"
+      >
 
       <label for="category">Category</label>
       <select id="category">
@@ -79,125 +244,286 @@
       </select>
 
       <label for="question">Question</label>
-      <textarea id="question" required minlength="5"
-        maxlength="1000"></textarea>
+      <textarea
+        id="question"
+        placeholder="Describe the administrative support request..."
+        minlength="5"
+        maxlength="1000"
+        required
+      ></textarea>
 
-      <button type="submit">Submit Ticket</button>
+      <button class="submit-btn" type="submit">
+        Create Ticket
+      </button>
     </form>
-    <p id="message" role="status"></p>
+
+    <p id="message" class="message" role="status"></p>
   </section>
 
+  <!-- TICKET MANAGEMENT -->
   <section class="panel">
-    <h2>Support Tickets</h2>
-    <button id="refreshButton">Refresh Tickets</button>
-    <div class="table-wrap">
+    <div class="toolbar">
+      <h2>Support Tickets</h2>
+      <button id="refreshButton">Refresh Tickets</button>
+    </div>
+
+    <div class="table-wrapper">
       <table>
         <thead>
           <tr>
             <th>Patient</th>
             <th>Category</th>
             <th>Question</th>
+            <th>Priority</th>
+            <th>Department</th>
+            <th>Assigned To</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody id="tickets"></tbody>
       </table>
     </div>
-    <p class="note">Demo only. Do not enter real patient information.</p>
+
+    <p class="note">
+      Educational demo only. Use fictional patient data.
+      Do not enter real patient information.
+    </p>
   </section>
+
 </main>
 
 <script>
-const form = document.getElementById("ticketForm");
-const message = document.getElementById("message");
-const ticketsBody = document.getElementById("tickets");
+  const form = document.getElementById("ticketForm");
+  const message = document.getElementById("message");
+  const ticketsBody = document.getElementById("tickets");
 
-function cell(row, value) {
-  const td = document.createElement("td");
-  td.textContent = value;
-  row.appendChild(td);
-  return td;
-}
+  function showMessage(text, isError = false) {
+    message.textContent = text;
+    message.className = isError
+      ? "message error"
+      : "message success";
+  }
 
-async function loadTickets() {
-  ticketsBody.replaceChildren();
-  try {
-    const response = await fetch("/queries");
-    if (!response.ok) throw new Error("Failed to load tickets");
-    const tickets = await response.json();
+  // Create a table cell safely
+  function cell(row, value) {
+    const td = document.createElement("td");
+    td.textContent = value ?? "";
+    row.appendChild(td);
+    return td;
+  }
+
+  // Shared helper for API requests
+  async function apiRequest(url, options = {}) {
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      let detail = `HTTP ${response.status}`;
+
+      try {
+        const data = await response.json();
+
+        if (typeof data.detail === "string") {
+          detail = data.detail;
+        }
+      } catch (_) {}
+
+      throw new Error(detail);
+    }
+
+    return response.json();
+  }
+
+  // Load dashboard statistics
+  async function loadStats() {
+    const stats = await apiRequest("/dashboard/stats");
+
+    document.getElementById("totalCount").textContent =
+      stats.total;
+
+    document.getElementById("openCount").textContent =
+      stats.open;
+
+    document.getElementById("progressCount").textContent =
+      stats.in_progress;
+
+    document.getElementById("resolvedCount").textContent =
+      stats.resolved;
+  }
+
+  // Create dropdown menu
+  function createSelect(options, selectedValue, onChange) {
+    const select = document.createElement("select");
+
+    options.forEach(value => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = value.replaceAll("_", " ");
+      select.appendChild(option);
+    });
+
+    select.value = selectedValue;
+    select.addEventListener("change", async () => {
+      select.disabled = true;
+
+      try {
+        await onChange(select.value);
+        await refreshDashboard();
+        showMessage("Ticket updated successfully");
+      } catch (error) {
+        showMessage(error.message, true);
+        await refreshDashboard().catch(console.error);
+      } finally {
+        select.disabled = false;
+      }
+    });
+
+    return select;
+  }
+
+  // Load and display all tickets
+  async function loadTickets() {
+    const tickets = await apiRequest("/queries");
+
+    ticketsBody.replaceChildren();
+
+    if (tickets.length === 0) {
+      const row = document.createElement("tr");
+      const td = document.createElement("td");
+
+      td.colSpan = 7;
+      td.textContent = "No support tickets found.";
+
+      row.appendChild(td);
+      ticketsBody.appendChild(row);
+      return;
+    }
 
     for (const ticket of tickets) {
       const row = document.createElement("tr");
+      const ticketUrl = `/queries/${encodeURIComponent(
+        ticket.ticket_id
+      )}`;
+
       cell(row, ticket.patient_id);
       cell(row, ticket.category);
       cell(row, ticket.question);
 
-      const td = document.createElement("td");
-      const select = document.createElement("select");
+      // PRIORITY
+      const priorityCell = document.createElement("td");
 
-      for (const status of ["open", "in_progress", "resolved"]) {
-        const option = document.createElement("option");
-        option.value = status;
-        option.textContent = status.replace("_", " ");
-        select.appendChild(option);
-      }
-
-      select.value = ticket.status;
-      select.addEventListener("change", async () => {
-        select.disabled = true;
-        try {
-          const response = await fetch(
-            `/queries/${encodeURIComponent(ticket.ticket_id)}`,
-            {
-              method: "PATCH",
-              headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({status: select.value})
-            }
-          );
-          if (!response.ok) throw new Error("Status update failed");
-        } catch (error) {
-          message.textContent = error.message;
-        } finally {
-          await loadTickets();
+      const prioritySelect = createSelect(
+        ["low", "medium", "high"],
+        ticket.priority,
+        async priority => {
+          await apiRequest(`${ticketUrl}/priority`, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({priority})
+          });
         }
-      });
+      );
 
-      td.appendChild(select);
-      row.appendChild(td);
+      priorityCell.appendChild(prioritySelect);
+      row.appendChild(priorityCell);
+
+      // DEPARTMENT
+      const departmentCell = document.createElement("td");
+
+      const departmentSelect = createSelect(
+        ["general", "billing", "appointments", "it_support"],
+        ticket.department,
+        async department => {
+          await apiRequest(`${ticketUrl}/assignment`, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              department,
+              assigned_to: ticket.assigned_to
+            })
+          });
+        }
+      );
+
+      departmentCell.appendChild(departmentSelect);
+      row.appendChild(departmentCell);
+
+      // ASSIGNED STAFF
+      cell(row, ticket.assigned_to || "Unassigned");
+
+      // STATUS
+      const statusCell = document.createElement("td");
+
+      const statusSelect = createSelect(
+        ["open", "in_progress", "resolved"],
+        ticket.status,
+        async status => {
+          await apiRequest(ticketUrl, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({status})
+          });
+        }
+      );
+
+      statusCell.appendChild(statusSelect);
+      row.appendChild(statusCell);
+
       ticketsBody.appendChild(row);
     }
-  } catch (error) {
-    message.textContent = error.message;
   }
-}
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const payload = {
-    patient_id: document.getElementById("patient").value,
-    category: document.getElementById("category").value,
-    question: document.getElementById("question").value
-  };
+  // Refresh tickets and statistics
+  async function refreshDashboard() {
+    await Promise.all([
+      loadTickets(),
+      loadStats()
+    ]);
+  }
 
-  try {
-    const response = await fetch("/queries", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(payload)
+  // Create a new support ticket
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const payload = {
+      patient_id: document.getElementById("patient").value,
+      category: document.getElementById("category").value,
+      question: document.getElementById("question").value
+    };
+
+    try {
+      await apiRequest("/queries", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+
+      form.reset();
+
+      showMessage("Ticket created successfully");
+
+      await refreshDashboard();
+
+    } catch (error) {
+      showMessage(error.message, true);
+    }
+  });
+
+  // Manual refresh
+  document.getElementById("refreshButton")
+    .addEventListener("click", async () => {
+      try {
+        await refreshDashboard();
+        showMessage("Dashboard refreshed");
+      } catch (error) {
+        showMessage(error.message, true);
+      }
     });
-    if (!response.ok) throw new Error("Could not create ticket");
-    message.textContent = "Ticket created successfully";
-    form.reset();
-    await loadTickets();
-  } catch (error) {
-    message.textContent = error.message;
-  }
-});
 
-document.getElementById("refreshButton")
-  .addEventListener("click", loadTickets);
-
-loadTickets();
+  // Initial load
+  refreshDashboard().catch(error => {
+    showMessage(error.message, true);
+  });
 </script>
+
 </body>
 </html>

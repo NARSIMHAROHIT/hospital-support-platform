@@ -1,0 +1,185 @@
+
+.patient-released-notes {
+  margin-top: 30px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  color: #1e293b;
+}
+
+.patient-released-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.patient-released-heading h2 {
+  margin: 0 0 8px;
+  font-size: 21px;
+}
+
+.patient-released-heading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.patient-note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.patient-note-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #1e293b;
+  text-align: left;
+  cursor: pointer;
+}
+
+.patient-note-card:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.patient-note-card strong {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.patient-note-card small {
+  display: block;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.patient-note-view {
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.patient-note-secondary {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #1d4ed8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.patient-note-secondary:disabled,
+.patient-note-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.patient-note-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.patient-note-detail h3 {
+  margin: 12px 0 2px;
+}
+
+.patient-note-detail > p {
+  margin: 3px 0;
+}
+
+.patient-note-field {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.patient-note-field h4 {
+  margin: 0 0 10px;
+}
+
+.patient-note-field p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+.patient-note-field small {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+}
+
+.patient-note-addenda {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.patient-note-addenda .patient-note-field {
+  margin-top: 10px;
+}
+
+.patient-note-error {
+  padding: 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.patient-note-empty {
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 10px;
+  color: #64748b;
+}
+
+.patient-note-disclaimer {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.clinical-note-sharing {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.clinical-note-sharing h4 {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .patient-released-notes {
+    padding: 16px;
+  }
+
+  .patient-released-heading {
+    flex-direction: column;
+  }
+
+  .patient-note-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

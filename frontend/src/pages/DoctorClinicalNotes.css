@@ -1,0 +1,421 @@
+
+/* ============================================
+   DOCTOR CLINICAL NOTES
+   ============================================ */
+
+.clinical-notes-section {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.clinical-notes-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.clinical-notes-heading h3 {
+  margin: 0 0 8px;
+}
+
+.clinical-notes-heading p,
+.clinical-notes-info {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ============================================
+   SECONDARY BUTTONS
+   ============================================ */
+
+.clinical-notes-secondary {
+  border: 1px solid #cbd5e1;
+  background: white;
+  color: #1d4ed8;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.clinical-notes-secondary:hover:not(:disabled) {
+  background: #eff6ff;
+}
+
+.clinical-notes-secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   EXISTING CLINICAL NOTES
+   ============================================ */
+
+.clinical-notes-existing {
+  margin-bottom: 24px;
+}
+
+.clinical-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clinical-note-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: inherit;
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.clinical-note-item:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #93c5fd;
+}
+
+.clinical-note-item.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.clinical-note-item:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clinical-note-item strong {
+  display: block;
+  font-size: 14px;
+}
+
+.clinical-note-item small {
+  display: block;
+  margin-top: 5px;
+  color: #64748b;
+}
+
+/* ============================================
+   DRAFT AND SIGNED STATUS
+   ============================================ */
+
+.clinical-note-status {
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 5px 9px;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.clinical-note-status.draft {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.clinical-note-status.signed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* ============================================
+   CLINICAL NOTE FORM
+   ============================================ */
+
+.clinical-note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clinical-note-form h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.clinical-note-form label,
+.clinical-notes-addenda label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.clinical-note-form select,
+.clinical-note-form textarea,
+.clinical-notes-addenda textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 11px;
+  background: #fff;
+  color: #1e293b;
+  font: inherit;
+}
+
+.clinical-note-form select:focus,
+.clinical-note-form textarea:focus,
+.clinical-notes-addenda textarea:focus {
+  outline: 2px solid #93c5fd;
+  outline-offset: 1px;
+  border-color: #2563eb;
+}
+
+.clinical-note-form textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.clinical-note-form textarea[readonly] {
+  background: #f8fafc;
+  color: #475569;
+  cursor: default;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+.clinical-notes-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.clinical-notes-primary,
+.clinical-notes-sign {
+  border: none;
+  color: #fff;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition:
+    background 0.2s,
+    opacity 0.2s;
+}
+
+.clinical-notes-primary {
+  background: #2563eb;
+}
+
+.clinical-notes-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.clinical-notes-sign {
+  background: #15803d;
+}
+
+.clinical-notes-sign:hover:not(:disabled) {
+  background: #166534;
+}
+
+.clinical-notes-primary:disabled,
+.clinical-notes-sign:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   CORRECTIONS AND ADDENDA
+   ============================================ */
+
+.clinical-notes-addenda {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.clinical-notes-addenda h4 {
+  margin: 0 0 16px;
+}
+
+.clinical-note-addendum {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.clinical-note-addendum small {
+  display: block;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.clinical-note-addendum p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+.clinical-notes-addenda form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* ============================================
+   NEW: PATIENT NOTE SHARING
+   ============================================ */
+
+.clinical-note-sharing {
+  margin-top: 26px;
+  padding: 20px;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.clinical-note-sharing h4 {
+  margin: 0 0 12px;
+  color: #1e3a8a;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.clinical-note-sharing > p {
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.clinical-note-sharing > p strong {
+  color: #1e293b;
+}
+
+.clinical-note-sharing .clinical-notes-info {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* Release to Patient */
+.clinical-note-sharing .clinical-notes-sign {
+  background: #15803d;
+  padding: 12px 18px;
+  font-size: 14px;
+}
+
+.clinical-note-sharing .clinical-notes-sign:hover:not(:disabled) {
+  background: #166534;
+}
+
+/* Revoke Patient Access */
+.clinical-note-sharing .clinical-notes-secondary {
+  color: #b91c1c;
+  background: #fff;
+  border: 1px solid #fca5a5;
+  padding: 12px 18px;
+  font-size: 14px;
+}
+
+.clinical-note-sharing .clinical-notes-secondary:hover:not(:disabled) {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.clinical-note-sharing button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   FEEDBACK MESSAGES
+   ============================================ */
+
+.clinical-notes-error,
+.clinical-notes-success {
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.clinical-notes-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.clinical-notes-success {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 700px) {
+  .clinical-notes-heading {
+    flex-direction: column;
+  }
+
+  .clinical-notes-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .clinical-notes-actions button {
+    width: 100%;
+  }
+
+  .clinical-note-sharing {
+    padding: 16px;
+  }
+
+  .clinical-note-sharing button {
+    width: 100%;
+  }
+
+  .clinical-note-item {
+    align-items: flex-start;
+  }
+}
+.clinical-notes-appointment-details {
+  padding: 16px;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.clinical-notes-appointment-details h4 {
+  margin: 0 0 12px;
+  color: #1e40af;
+}
+
+.clinical-notes-appointment-details p {
+  margin: 7px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #334155;
+}

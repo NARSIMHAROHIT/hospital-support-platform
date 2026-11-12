@@ -1,5 +1,9 @@
 fastapi
 uvicorn
 httpx
-pytestemail-validator
+pytest
+email-validator
 argon2-cffi
+Pillow
+pypdf
+python-multipart

@@ -1,0 +1,129 @@
+
+.reschedule-page {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 36px);
+  min-width: 0;
+}
+
+.reschedule-header {
+  margin-bottom: 24px;
+}
+
+.reschedule-header h1 {
+  margin: 15px 0 8px;
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.reschedule-header p,
+.reschedule-card p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.reschedule-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: clamp(18px, 3vw, 28px);
+  margin-bottom: 20px;
+}
+
+.reschedule-card h2 {
+  margin-top: 0;
+  font-size: 21px;
+}
+
+.reschedule-card label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.reschedule-card select {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: white;
+  font: inherit;
+}
+
+.reschedule-slot-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fill, minmax(min(100%, 145px), 1fr));
+  gap: 12px;
+  margin: 16px 0 24px;
+}
+
+.reschedule-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: white;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.reschedule-slot span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.reschedule-slot.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.reschedule-submit {
+  padding: 13px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+.reschedule-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reschedule-error {
+  padding: 14px;
+  border-radius: 9px;
+  color: #991b1b;
+  background: #fef2f2;
+}
+
+.reschedule-success {
+  color: #166534 !important;
+  font-weight: 600;
+}
+
+.reschedule-note {
+  padding: 12px;
+  background: #eff6ff;
+  border-radius: 9px;
+}
+
+@media (max-width: 600px) {
+  .reschedule-page {
+    padding: 14px;
+  }
+
+  .reschedule-submit {
+    width: 100%;
+  }
+}

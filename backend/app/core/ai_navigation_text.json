@@ -1,0 +1,68 @@
+{
+  "follow_up_phrases": [
+    "where do i find it",
+    "where can i find it",
+    "where can i see it",
+    "where is it",
+    "how do i access it",
+    "how can i access it",
+    "how do i open it",
+    "what about it",
+    "tell me more"
+  ],
+  "navigation_cues": [
+    "where",
+    "how",
+    "find",
+    "view",
+    "review",
+    "see",
+    "open",
+    "access",
+    "portal",
+    "page",
+    "section"
+  ],
+  "medical_safety_cues": [
+    "emergency",
+    "urgent",
+    "911",
+    "chest pain",
+    "bleeding",
+    "trouble breathing",
+    "symptom",
+    "medication",
+    "dosage",
+    "dose",
+    "diagnosis",
+    "treatment",
+    "suicide"
+  ],
+  "topics": {
+    "appointments": {
+      "keywords": [
+        "appointment",
+        "booking",
+        "reschedule"
+      ],
+      "reply": "Select My Appointments from the left sidebar of your Patient Portal to review your appointments. This assistant cannot retrieve your personal appointment details yet.",
+      "booking_reply": "To schedule a new appointment:\n1. Select Find Doctors in the left sidebar.\n2. Choose a doctor.\n3. Select an available appointment slot.\n4. Confirm your booking.\n5. Open My Appointments to review it.\n\nI can guide you through booking, but I won't make a reservation without your confirmation."
+    },
+    "medical_records": {
+      "keywords": [
+        "medical record",
+        "medical document",
+        "uploaded document"
+      ],
+      "reply": "Select Medical Records from the left sidebar to view your available records. This assistant cannot interpret or provide medical advice about the contents of those records."
+    },
+    "clinical_notes": {
+      "keywords": [
+        "clinical note",
+        "doctor's note",
+        "released note"
+      ],
+      "reply": "You can view clinical notes only when they have been released to your patient account. If you cannot find a released note, contact hospital support."
+    }
+  }
+}

@@ -32,3 +32,6 @@ class AssignmentUpdate(BaseModel):
         default=None,
         max_length=50
     )
+class MyTicketCreate(BaseModel):
+    category: Category
+    question: str = Field(min_length=5, max_length=1000)

@@ -1,0 +1,168 @@
+
+/* Doctor schedule management */
+
+.doctor-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.doctor-section-heading h2 {
+  margin: 0 0 6px;
+}
+
+.doctor-refresh,
+.doctor-next-date {
+  padding: 11px 16px;
+  background: #ffffff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.doctor-refresh:hover,
+.doctor-next-date:hover {
+  background: #eff6ff;
+}
+
+.doctor-schedule-toolbar {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.doctor-schedule-toolbar #doctor-date {
+  display: block;
+  width: 100%;
+  min-width: 220px;
+  margin-bottom: 0;
+  background: white;
+  color: #17263c;
+}
+
+.doctor-schedule-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0 24px;
+}
+
+.doctor-schedule-stats span {
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.doctor-add-slot-form {
+  padding: 24px;
+  margin: 22px 0 28px;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  background: #eff6ff;
+}
+
+.doctor-add-slot-form h3 {
+  margin: 0 0 18px;
+}
+
+.doctor-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: 14px;
+}
+
+.doctor-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.doctor-form-grid input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  background: white;
+  color: #17263c;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  font: inherit;
+}
+
+.doctor-form-grid .doctor-approve {
+  min-height: 44px;
+}
+
+.doctor-add-slot-form .doctor-subtitle {
+  margin: 16px 0 0;
+  font-size: 13px;
+}
+
+.status-occupied {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-blocked {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.doctor-block-button {
+  padding: 10px 12px;
+  margin-top: 8px;
+  border: 1px solid #ef4444;
+  border-radius: 9px;
+  background: white;
+  color: #b91c1c;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.doctor-block-button:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.doctor-block-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.doctor-slot-card {
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .doctor-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-form-grid .doctor-approve {
+    width: 100%;
+  }
+
+  .doctor-schedule-toolbar,
+  .doctor-section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .doctor-schedule-toolbar #doctor-date {
+    min-width: 0;
+  }
+}

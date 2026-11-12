@@ -1,3 +1,4 @@
+import os
 import hashlib
 import secrets
 from contextlib import closing
@@ -68,7 +69,7 @@ def login(credentials: LoginRequest, response: Response):
         key=SESSION_COOKIE,
         value=token,
         httponly=True,
-        secure=False,  # Local HTTP demo only
+        secure=os.getenv("HOSPITAL_COOKIE_SECURE", "false").lower() == "true",
         samesite="lax",
         max_age=3600,
         path="/"
@@ -88,10 +89,10 @@ def my_profile(
     return {
         "user_id": user["user_id"],
         "patient_id": user["patient_id"],
+        "doctor_id": user["doctor_id"],
         "email": user["email"],
-        "role": user["role"]
+        "role": user["role"],
     }
-
 @router.post("/auth/logout")
 def logout(
     response: Response,

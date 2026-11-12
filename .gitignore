@@ -8,3 +8,44 @@ logs/
 .env
 
 *.bak
+
+# Python environment and generated files
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+*.pyc
+
+# SQLite databases and backups
+*.db
+*.db-*
+*.db.*
+**/backups/
+
+# Private uploaded documents
+**/private_uploads/
+
+# Credentials and environment variables
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Frontend generated files
+**/node_modules/
+frontend/dist/
+.vercel/
+
+# Local logs and temporary code backups
+*.log
+*.py.bak
+*.py.before_*
+*.py.broken
+*.py.working
+
+# Local sample documents — review before publishing
+/bloodreport.pdf
+/labreport.pdf
+/Chest_Xray_PA_3-8-2010.png
+/Electrocardiograma.png
+*.backup

@@ -1,8 +1,15 @@
 
+import os
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "hospital.db"
+db_path = os.getenv("HOSPITAL_DB_PATH")
+if not db_path:
+    raise SystemExit(
+        "HOSPITAL_DB_PATH must be set before running migrations."
+    )
+
+DB_PATH = Path(db_path).expanduser().resolve()
 
 with sqlite3.connect(DB_PATH) as conn:
     conn.execute("PRAGMA foreign_keys = ON")
